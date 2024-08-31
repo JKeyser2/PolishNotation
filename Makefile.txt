@@ -1,0 +1,21 @@
+FILE = main
+FILE2 = funcs
+FILE3 = cfile
+
+one: $(FILE)
+
+$(FILE): $(FILE).asm
+        nasm -f elf64 -g $(FILE).asm -o $(FILE).o
+        gcc -m64 -o $(FILE) $(FILE).o
+
+two: $(FILE).asm $(FILE2).asm $(FILE3).c
+        nasm -f elf64 -g $(FILE).asm -o $(FILE).o
+        nasm -f elf64 -g $(FILE2).asm -o $(FILE2).o
+        gcc -m64 -c $(FILE3).c -o $(FILE3).o
+        gcc -m64 -nostartfiles -o $(FILE) $(FILE2).o $(FILE).o $(FILE3).o
+
+run: $(FILE)
+        ./$(FILE)
+
+clean:
+        rm *.o
